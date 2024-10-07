@@ -20,16 +20,19 @@ def get_random_path():
     targetFound = False
     startIndex = 0
     endLoop = False
-    path = []
+    path = [] #path returned as list of nodes to visit
     currentIndex = startIndex
 
     while not endLoop:
+        #tracks if target has been found
         if (currentIndex == global_game_data.target_node[global_game_data.current_graph_index]):
             targetFound = True
+        #tracks end loop
         if (currentIndex == len(graphData) - 1 and targetFound):
             endLoop = True
             break
-        possibilities = graphData[currentIndex][1]
+        possibilities = graphData[currentIndex][1] #possibilities come from node neighbors
+        #assign random next node
         nextNode = possibilities[random.randint(0,len(possibilities) - 1)]
         path.append(nextNode)
         currentIndex = nextNode

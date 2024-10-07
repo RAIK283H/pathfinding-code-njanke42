@@ -44,6 +44,7 @@ class Scoreboard:
                                                       font_name='Arial',
                                                       font_size=self.font_size, batch=batch, group=group, color=player[2][colors.TEXT_INDEX])
 
+            #Student addition
             self.player_excess_distance_display.append(
                 (excess_distance_label, player))
             nodes_visited_label = pyglet.text.Label("Nodes Visited:",
@@ -77,6 +78,7 @@ class Scoreboard:
         for index, (display_element, player) in enumerate(self.player_path_display):
             display_element.x = config_data.window_width - self.stat_width
             display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 5 - self.stat_height * (index * self.number_of_stats)
+        #Student addition
         for index, (display_element, player) in enumerate(self.player_nodes_visited_display):
             display_element.x = config_data.window_width - self.stat_width
             display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 6 - self.stat_height * (index * self.number_of_stats)
@@ -108,6 +110,7 @@ class Scoreboard:
                 if player_object.player_config_data == player_configuration_info:
                     display_element.text = "Excess Distance Traveled: " + str(max(0, int(player_object.distance_traveled-self.distance_to_exit)))
     
+    #Student addition
     def update_nodes_visited(self):
         for display_element, player_configuration_info in self.player_nodes_visited_display:
             for player_object in global_game_data.player_objects:

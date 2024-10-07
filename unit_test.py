@@ -28,6 +28,7 @@ class TestPathFinding(unittest.TestCase):
 
 class TestRandomPathFinding(unittest.TestCase):
 
+    #Tests pathing on super basic graph (basically that it returns something)
     def test_base_case(self):
         graph_data.graph_data[0] = [
             [(0, 0), [1]],
@@ -40,7 +41,15 @@ class TestRandomPathFinding(unittest.TestCase):
         expected_path = [1]
         self.assertEqual(path, expected_path)
 
+    #test on graph that might allow for failure
     def test_hits_target_and_end(self):
+
+        #Graph Structure:
+        #         4
+        #         |
+        #         3
+        #         |
+        # 0 - 1 - 2 - 5 - 6
         graph_data.graph_data[0] = [
             [(0, 0), [1]], #0
             [(0, 0), [0,2]], #1
@@ -53,10 +62,8 @@ class TestRandomPathFinding(unittest.TestCase):
         global_game_data.current_graph_index = 0
         global_game_data.target_node.append(4)
         path = pathing.get_random_path()
-        self.assertIn(2, path)
-        self.assertEqual(path[len(path) - 1], 6)
-
-
+        self.assertIn(2, path) #check it found target
+        self.assertEqual(path[len(path) - 1], 6) #check it ends on end
 
 if __name__ == '__main__':
     unittest.main()
