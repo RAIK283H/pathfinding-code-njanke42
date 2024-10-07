@@ -17,15 +17,18 @@ def get_test_path():
 
 def get_random_path():
     graphData = graph_data.graph_data[global_game_data.current_graph_index]
+    assert graph_data is not None
     targetFound = False
     startIndex = 0
     endLoop = False
     path = [] #path returned as list of nodes to visit
     currentIndex = startIndex
+    target_node = global_game_data.target_node[global_game_data.current_graph_index]
+    assert target_node is not None
 
     while not endLoop:
         #tracks if target has been found
-        if (currentIndex == global_game_data.target_node[global_game_data.current_graph_index]):
+        if (currentIndex == target_node):
             targetFound = True
         #tracks end loop
         if (currentIndex == len(graphData) - 1 and targetFound):
