@@ -5,7 +5,6 @@ import relative_display_functions
 import graph_data
 import config_data
 
-
 class Player:
 
     def __init__(self, player_config_data, player_index, batch, group):
@@ -31,11 +30,12 @@ class Player:
         self.distance_traveled = 0
         self.nodes_visited = 0
 
-    def update(self, dt):
+    def update(self, dt, scoreboard):
         last_absolute_x = self.absolute_x
         last_absolute_y = self.absolute_y
         # Make sure one player is always running
         if global_game_data.current_player_index < 0 or global_game_data.current_player_index >= len(config_data.player_data):
+            scoreboard.update_winner()
             global_game_data.current_player_index = 0
             # Reset all values of players
             for player in global_game_data.player_objects:
