@@ -129,7 +129,6 @@ class Scoreboard:
         for player_object in global_game_data.player_objects:
             if player_object.distance_traveled < winner_amount:
                 if global_game_data.target_node[global_game_data.current_graph_index] in global_game_data.graph_paths[player_object.player_index]:
-                    print(config_data.player_data[player_object.player_index][0])
                     winner = config_data.player_data[player_object.player_index][0]
                     winner_amount = player_object.distance_traveled   
         self.winner_display.text = f'Winner: {winner}'

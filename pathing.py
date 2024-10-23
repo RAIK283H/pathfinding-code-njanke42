@@ -49,11 +49,18 @@ def get_dfs_path():
     path = dfs_path_creation(0, target_node)
     graphData = graph_data.graph_data[global_game_data.current_graph_index]
     secondPath = dfs_path_creation(target_node, len(graphData) - 1)
-    return path + secondPath
+    path = path + secondPath
+    assert target_node in path
+    assert len(graphData) - 1 in path
+    for i in range (0, len(path) - 2):
+        assert path[i+1] in graphData[path[i]][1], f"Path did not find {path[i+1]} in {graphData[path[i]][1]}"
+    return path
 
 def dfs_path_creation(start, end):
     graphData = graph_data.graph_data[global_game_data.current_graph_index]
     assert graphData is not None
+    assert start <= len(graphData)
+    assert end <=  len(graphData)
 
     frontier = []
     frontier.append(start)
@@ -94,6 +101,7 @@ def dfs_path_creation(start, end):
     while currentIndex != start:
         path.insert(0, currentIndex)
         currentIndex = parents[currentIndex]
+    assert path is not None
     return path
 
 def get_bfs_path():
@@ -101,11 +109,18 @@ def get_bfs_path():
     path = bfs_path_creation(0, target_node)
     graphData = graph_data.graph_data[global_game_data.current_graph_index]
     secondPath = bfs_path_creation(target_node, len(graphData) - 1)
-    return path + secondPath
+    path = path + secondPath
+    assert target_node in path
+    assert len(graphData) - 1 in path
+    for i in range (0, len(path) - 2):
+        assert path[i+1] in graphData[path[i]][1], f"Path did not find {path[i+1]} in {graphData[path[i]][1]}"
+    return path
 
 def bfs_path_creation(start, end):
     graphData = graph_data.graph_data[global_game_data.current_graph_index]
     assert graphData is not None
+    assert start <= len(graphData)
+    assert end <=  len(graphData)
 
     frontier = []
     frontier.append(start)
@@ -146,6 +161,7 @@ def bfs_path_creation(start, end):
     while currentIndex != start:
         path.insert(0, currentIndex)
         currentIndex = parents[currentIndex]
+    assert path is not None
     return path
 
 
