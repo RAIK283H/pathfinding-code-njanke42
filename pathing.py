@@ -46,12 +46,17 @@ def get_random_path():
 
 def get_dfs_path():
     target_node = global_game_data.target_node[global_game_data.current_graph_index]
-    path = dfs_path_creation(0, target_node)
     graphData = graph_data.graph_data[global_game_data.current_graph_index]
+
+    #First run from start to target
+    path = dfs_path_creation(0, target_node)
+
+    #Second run from target to end (starts over)
     secondPath = dfs_path_creation(target_node, len(graphData) - 1)
     path = path + secondPath
     assert target_node in path
     assert len(graphData) - 1 in path
+    #Checks that there are connections between every node it wants to take
     for i in range (0, len(path) - 2):
         assert path[i+1] in graphData[path[i]][1], f"Path did not find {path[i+1]} in {graphData[path[i]][1]}"
     return path
@@ -61,6 +66,7 @@ def dfs_path_creation(start, end):
     assert graphData is not None
     assert start <= len(graphData)
     assert end <=  len(graphData)
+    #Graph data works
 
     frontier = []
     frontier.append(start)
@@ -71,31 +77,29 @@ def dfs_path_creation(start, end):
     parents = {}
 
     while frontier:
-        #Get the next element in the queue
+        #Pop from end
         currentIndex = frontier.pop()
-        #Mark the next element as visited
+        #Mark as visited if it hasn't been seen yet
         if currentIndex not in visited:
             visited.append(currentIndex)
 
-        #Get neighbors of the current cell (passageways)
         neighbors = graphData[currentIndex][1]
-
-        #Add neighbors to the queue
+        #Deal with neighbors
         for i in range(len(neighbors)):
             neighbor = neighbors[i]
 
-            # see if we've visited this cell
+            #See if neighbors have been seen yet
             if neighbor not in visited:
                 visited.append(neighbor)
-                # add current as the neighbor's parent
+                #Add the current node as the parent of this neighbor
                 parents[neighbor] = currentIndex
-                # add the neighbor to the queue
+                #Add neighbor to queue for later
                 frontier.append(neighbor)
         #Target found?
         if (currentIndex == end):
             break
 
-    #retrace path
+    #Retrace the path and record from parents
     path = []
     currentIndex = end
     while currentIndex != start:
@@ -106,12 +110,19 @@ def dfs_path_creation(start, end):
 
 def get_bfs_path():
     target_node = global_game_data.target_node[global_game_data.current_graph_index]
-    path = bfs_path_creation(0, target_node)
     graphData = graph_data.graph_data[global_game_data.current_graph_index]
+
+    
+    #First run from start to target
+    path = bfs_path_creation(0, target_node)
+
+    #Second run from target to end (starts over)
     secondPath = bfs_path_creation(target_node, len(graphData) - 1)
     path = path + secondPath
     assert target_node in path
     assert len(graphData) - 1 in path
+
+    #Checks that there are connections between each node it wants to follow
     for i in range (0, len(path) - 2):
         assert path[i+1] in graphData[path[i]][1], f"Path did not find {path[i+1]} in {graphData[path[i]][1]}"
     return path
@@ -131,31 +142,29 @@ def bfs_path_creation(start, end):
     parents = {}
 
     while frontier:
-        #Get the next element in the queue
+        #Pop from top
         currentIndex = frontier.pop(0)
-        #Mark the next element as visited
+        #Mark as visited if not yet seen
         if currentIndex not in visited:
             visited.append(currentIndex)
 
-        #Get neighbors of the current cell (passageways)
         neighbors = graphData[currentIndex][1]
-
-        #Add neighbors to the queue
+        #Deal with all neighbors
         for i in range(len(neighbors)):
             neighbor = neighbors[i]
 
-            # see if we've visited this cell
+            #If neighbor hasn't been seen yet
             if neighbor not in visited:
                 visited.append(neighbor)
-                # add current as the neighbor's parent
+                #Add current node as this neighbor's parent
                 parents[neighbor] = currentIndex
-                # add the neighbor to the queue
+                #Add neighbor to pile
                 frontier.append(neighbor)
         #Target found?
         if (currentIndex == end):
             break
 
-    #retrace path
+    #Retrace path using parents
     path = []
     currentIndex = end
     while currentIndex != start:
