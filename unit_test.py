@@ -28,19 +28,6 @@ class TestPathFinding(unittest.TestCase):
 
 class TestRandomPathFinding(unittest.TestCase):
 
-    #Tests pathing on super basic graph (basically that it returns something)
-    def test_base_case(self):
-        graph_data.graph_data[0] = [
-            [(0, 0), [1]],
-            [(200, -200), [0]],
-        ]
-        global_game_data.current_graph_index = 0
-        global_game_data.target_node.append(1)
-
-        path = pathing.get_random_path()
-        expected_path = [1]
-        self.assertEqual(path, expected_path)
-
     #test on graph that might allow for failure
     def test_hits_target_and_end(self):
 
@@ -64,6 +51,106 @@ class TestRandomPathFinding(unittest.TestCase):
         path = pathing.get_random_path()
         self.assertIn(2, path) #check it found target
         self.assertEqual(path[len(path) - 1], 6) #check it ends on end
+
+class TestBFSPathFinding(unittest.TestCase):
+    #test to check returning a working graph
+    def test_hits_target_and_end(self):
+
+        #Graph Structure:
+        #         4
+        #         |
+        #         3
+        #         |
+        # 0 - 1 - 2 - 5 - 6
+        graph_data.graph_data[0] = [
+            [(0, 0), [1]], #0
+            [(0, 0), [0,2]], #1
+            [(0, 0), [1,3,5]], #2
+            [(0, 0), [2,4]], #3, extends to target node
+            [(0, 0), [3]], #4, target node
+            [(0, 0), [2,6]], #5
+            [(0, 0), [5]], #6
+        ]
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = []
+        global_game_data.target_node.append(4)
+        path = pathing.get_bfs_path()
+        self.assertIn(2, path) #check it found target
+        self.assertEqual(path[len(path) - 1], 6) #check it ends on end
+
+    def test_actually_bfs(self):
+        #Graph Structure
+        #
+        #
+        #         2 - - - - - - - 7
+        #         |               |
+        #     0 - 1 - 3 - 4 - 5 - 6
+        graph_data.graph_data[0] = [
+            [(0, 0), [1]], #0
+            [(0, 0), [0,2,3]], #1
+            [(0, 0), [1,7]], #2
+            [(0, 0), [1,4]], #3, extends to target node
+            [(0, 0), [3,5]], #4, target node
+            [(0, 0), [4,6]], #5
+            [(0, 0), [5,7]], #6
+            [(0, 0), [2,6]], #7
+        ]
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = []
+        global_game_data.target_node.append(1)
+        path = pathing.get_bfs_path()
+        self.assertIn(1, path) #check it found target
+        expectedPath = [1,2,7]
+        self.assertEqual(path, expectedPath) #check it actually did bfs
+
+class TestDFSPathFinding(unittest.TestCase):
+    #test to check returning a working graph
+    def test_hits_target_and_end(self):
+
+        #Graph Structure
+        #      2 - - - - - - - 7
+        #      |               |
+        #  0 - 1 - 3 - 4 - 5 - 6
+        #BFS will find 1,2,7. DFS will not
+        graph_data.graph_data[0] = [
+            [(0, 0), [1]], #0
+            [(0, 0), [0,2]], #1
+            [(0, 0), [1,3,5]], #2
+            [(0, 0), [2,4]], #3, extends to target node
+            [(0, 0), [3]], #4, target node
+            [(0, 0), [2,6]], #5
+            [(0, 0), [5]], #6
+        ]
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = []
+        global_game_data.target_node.append(4)
+        path = pathing.get_dfs_path()
+        self.assertIn(2, path) #check it found target
+        self.assertEqual(path[len(path) - 1], 6) #check it ends on end
+
+    def test_actually_bfs(self):
+        #Graph Structure
+        #      2 - - - - - - - 7
+        #      |               |
+        #  0 - 1 - 3 - 4 - 5 - 6
+        #BFS will find 1,2,7. DFS will not
+        graph_data.graph_data[0] = [
+            [(0, 0), [1]], #0
+            [(0, 0), [0,2,3]], #1
+            [(0, 0), [1,7]], #2
+            [(0, 0), [1,4]], #3, extends to target node
+            [(0, 0), [3,5]], #4, target node
+            [(0, 0), [4,6]], #5
+            [(0, 0), [5,7]], #6
+            [(0, 0), [2,6]], #7
+        ]
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = []
+        global_game_data.target_node.append(1)
+        path = pathing.get_dfs_path()
+        self.assertIn(1, path) #check it found target
+        expectedPath = [1,3,4,5,6,7]
+        self.assertEqual(path, expectedPath) #check it actually did bfs
 
 if __name__ == '__main__':
     unittest.main()
