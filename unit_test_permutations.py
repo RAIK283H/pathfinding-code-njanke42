@@ -2,7 +2,7 @@ import math
 import unittest
 import permutations
 import graph_data
-import global_game_data
+
 
 class TestPermutations(unittest.TestCase):
     def test_get_permutations_works_starting_from_zero(self):
@@ -32,7 +32,7 @@ class TestHamiltonianCycles(unittest.TestCase):
         ]
 
         cycles = permutations.check_hamiltonian_cycles(graph=graph_data.graph_data[0])
-        self.assertEqual(len(cycles), 0)
+        self.assertTrue(cycles is None)
 
 
     def test_graph_two_cycles(self):
@@ -84,7 +84,7 @@ class TestHamiltonianCycles(unittest.TestCase):
             [(0,0), [3]], #4
         ]
         cycles = permutations.check_hamiltonian_cycles(graph=graph_data.graph_data[0])
-        self.assertEqual(len(cycles), 0)
+        self.assertTrue(cycles is None)
 
 
 if __name__ == '__main__':
