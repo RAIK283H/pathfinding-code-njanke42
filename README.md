@@ -8,3 +8,9 @@ Statistics Page Addition:
 
 New Graph:
     Another graph was added with 27 nodes. It is designed to throw off the random path algorithm by having long sections of paths it can go down, without much interconnectedness that could give it an advantage. It must go down this long path to find the target and then return to find the exit. Initially it was designed so only the beginning was connected to the exit, but this made path calculation unreasonably long in most circumstances, so additional connections were added.
+
+
+HOMEWORK 6 EXTRA CREDIT
+I implemented a heapqueue to implement my priority queue. To ensure everything worked, I popped lowest weight values first and had a dictionary of nodes I had already visited (completed). If I popped a node that I already completed, I discarded it without any computation, which was my way of updating priorities. Therefore, the benefits of priority queue were maintained.
+
+I also implemented the A* algorithm using the distance from the node to the desired end as the heuristic. This is applicable because it will always underestimate or equal the true distance. I made sure to keep the weight value and the true distance value seperate so Dijkstras still functions.

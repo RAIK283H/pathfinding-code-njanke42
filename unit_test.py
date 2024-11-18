@@ -152,5 +152,103 @@ class TestDFSPathFinding(unittest.TestCase):
         expectedPath = [1,3,4,5,6,7]
         self.assertEqual(path, expectedPath) #check it actually did bfs
 
+class TestDijkstrasPathFinding(unittest.TestCase):
+    #test to check returning a working graph
+    def test_hits_target_and_end(self):
+
+        #Graph Structure
+        #  0 - 1 - 2 - 3
+        graph = [
+            [(0, 0), [1]], #0
+            [(10, 0), [0,2]], #1
+            [(20, 0), [1,3]], #2
+            [(30, 0), [2]], #3
+        ]
+        path = pathing.dijkstras_between_two_nodes(graph, 0, 3, False)
+        expected_path = [0,1,2,3]
+        self.assertEqual(path, expected_path, f"{path} is not {expected_path}")
+
+    #test to check that dijkstras care about distance over nodes visited
+    def test_dijkstras_cares_about_distance(self):
+        #Graph Structure
+        #          1
+        #         / \
+        #        /   \
+        #       /     \
+        #      /       \
+        #     /         \
+        #    /           \
+        #   /             \
+        #  0 - 2 - 3 - 4 - 5
+        graph = [
+            [(0, 0), [1,2]], #0
+            [(40, 500), [0,5]], #1
+            [(20, 0), [0,3]], #2
+            [(40, 0), [2,4]], #3
+            [(60, 0), [3,5]], #4
+            [(80, 0), [4,1]], #5
+        ]
+        path = pathing.dijkstras_between_two_nodes(graph, 0, 5, False)
+        expected_path = [0,2,3,4,5]
+        self.assertEqual(path, expected_path, f"{path} is not {expected_path}")
+    
+    #This tests the actual path making algorithm used by the program (uses target)
+    def test_dijkstras_path_making_works(self):
+        #Graph Structure
+        #          1
+        #         / \
+        #        /   \
+        #       /     \
+        #      /       \
+        #     /         \
+        #    /           \
+        #   /             \
+        #  0 - 2 - 3 - 4 - 5 - 6
+        graph_data.graph_data[0] = [
+            [(0, 0), [1,2]], #0
+            [(40, 500), [0,5]], #1
+            [(20, 0), [0,3]], #2
+            [(40, 0), [2,4]], #3
+            [(60, 0), [3,5]], #4
+            [(80, 0), [4,1,6]], #5
+            [(100, 0), [5]], #6
+        ]
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = []
+        global_game_data.target_node.append(5)
+        path = pathing.get_dijkstra_path()
+        self.assertIn(5, path) #check it found target
+        expectedPath = [0,2,3,4,5,6]
+        self.assertEqual(path, expectedPath) #check it actually did bfs
+    
+    #Tests A*
+    def test_a_star(self):
+        #Graph Structure
+        #          1
+        #         / \
+        #        /   \
+        #       /     \
+        #      /       \
+        #     /         \
+        #    /           \
+        #   /             \
+        #  0 - 2 - 3 - 4 - 5 - 6
+        graph_data.graph_data[0] = [
+            [(0, 0), [1,2]], #0
+            [(40, 500), [0,5]], #1
+            [(20, 0), [0,3]], #2
+            [(40, 0), [2,4]], #3
+            [(60, 0), [3,5]], #4
+            [(80, 0), [4,1,6]], #5
+            [(100, 0), [5]], #6
+        ]
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = []
+        global_game_data.target_node.append(5)
+        path = pathing.get_a_star_path()
+        self.assertIn(5, path) #check it found target
+        expectedPath = [0,2,3,4,5,6]
+        self.assertEqual(path, expectedPath) #check it actually did bfs
+
 if __name__ == '__main__':
     unittest.main()

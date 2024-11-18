@@ -11,6 +11,7 @@ def set_current_graph_paths():
     #global_game_data.graph_paths.append(get_dfs_path())
     #global_game_data.graph_paths.append(get_bfs_path())
     global_game_data.graph_paths.append(get_dijkstra_path())
+    global_game_data.graph_paths.append(get_a_star_path())
 
 
 def get_test_path():
@@ -181,27 +182,33 @@ def get_dijkstra_path():
     graphData = graph_data.graph_data[global_game_data.current_graph_index]
     target_node = global_game_data.target_node[global_game_data.current_graph_index]
 
-    path = dijkstras_between_two_nodes(graphData, 0, target_node)
+    path = dijkstras_between_two_nodes(graphData, 0, target_node, False)
 
-    path_2 = dijkstras_between_two_nodes(graphData, target_node, len(graphData) - 1)
+    path_2 = dijkstras_between_two_nodes(graphData, target_node, len(graphData) - 1, False)
     path_2.remove(target_node)
     path += path_2
 
+    print(path)
+    assert path[0] == 0, 'Path does not begin at 0'
+    assert path[-1] == len(graphData) - 1, 'Path does not end at end node'
+    for i in range(len(path) - 2):
+        assert path[i] in graphData[path[i+1]][1], f'{path[i]} not in of {graphData[path[i+1]][1]}'
+
     return path
 
-def dijkstras_between_two_nodes(graph, start_index, end_index):
+def dijkstras_between_two_nodes(graph, start_index, end_index, a_star_on):
     frontier = []
-    heap.heappush(frontier, (0, start_index, None))
+    heap.heappush(frontier, (0, start_index, None, 0)) #weight, node, parent node this weight is from, actual distance
     parents = {}
     visited = set()
     for i in range(0, len(graph)):
-        heap.heappush(frontier, (math.inf, i, None))
+        heap.heappush(frontier, (math.inf, i, None, math.inf)) #weight, node, parent node this weight is from, actual distance
         parents[i] = (math.inf, None)
     parents[0] = (0, None) #Distance, parent
 
 
     while frontier:
-        current_distance, current_node, parent_node = heap.heappop(frontier)
+        current_weight, current_node, parent_node, current_distance = heap.heappop(frontier)
 
         #We already popped this node once with a shorter distance, we don't need to do it again
         if current_node in visited:
@@ -213,19 +220,37 @@ def dijkstras_between_two_nodes(graph, start_index, end_index):
         
         neighbors = graph[current_node][1]
         for neighbor in neighbors:
-            if neighbor not in visited:
+            if neighbor not in visited: 
                 new_distance = current_distance + math.sqrt(math.pow(graph[current_node][0][0] - graph[neighbor][0][0],2) + math.pow(graph[current_node][0][1] - graph[neighbor][0][1],2))
+                new_weight = new_distance 
+                if a_star_on:
+                    new_weight = new_distance + math.sqrt(math.pow(graph[end_index][0][0] - graph[neighbor][0][0],2) + math.pow(graph[end_index][0][1] - graph[neighbor][0][1],2))
                 if new_distance < parents[neighbor][0]:
                     parents[neighbor] = (new_distance, current_node)
-                    heap.heappush(frontier, (new_distance, neighbor, current_node))
+                    heap.heappush(frontier, (new_weight, neighbor, current_node, new_distance))
     
     path = []
     path.append(end_index)
     parent = parents[end_index][1]
-    print(parents)
     while parent is not None:
         path.append(parent)
         parent = parents[parent][1]
     path.reverse()
     return path
 
+def get_a_star_path():
+    graphData = graph_data.graph_data[global_game_data.current_graph_index]
+    target_node = global_game_data.target_node[global_game_data.current_graph_index]
+
+    path = dijkstras_between_two_nodes(graphData, 0, target_node, True)
+
+    path_2 = dijkstras_between_two_nodes(graphData, target_node, len(graphData) - 1, True)
+    path_2.remove(target_node)
+    path += path_2
+
+    assert path[0] == 0, 'Path does not begin at 0'
+    assert path[-1] == len(graphData) - 1, 'Path does not end at end node'
+    for i in range(len(path) - 2):
+        assert path[i] in graphData[path[i+1]][1], f'{path[i]} not in of {graphData[path[i+1]][1]}'
+
+    return path
