@@ -70,7 +70,7 @@ class Scoreboard:
         self.distance_to_exit_label.x = config_data.window_width - self.stat_width
         self.distance_to_exit_label.y = config_data.window_height - self.stat_height
         self.winner_display.x = config_data.window_width - self.stat_width 
-        self.winner_display.y = config_data.window_height - self.stat_height * 18
+        self.winner_display.y = config_data.window_height - self.stat_height * 1.8
 
         for index, (display_element, player) in enumerate(self.player_name_display):
             display_element.x = config_data.window_width - self.stat_width
