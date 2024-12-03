@@ -3,15 +3,18 @@ import global_game_data
 import random
 import heapq as heap
 import math
+import f_w
 
 def set_current_graph_paths():
     global_game_data.graph_paths.clear()
+    global_game_data.target_node[0] = 13
     #global_game_data.graph_paths.append(get_test_path())
-    global_game_data.graph_paths.append(get_random_path())
-    global_game_data.graph_paths.append(get_dfs_path())
-    global_game_data.graph_paths.append(get_bfs_path())
+    #global_game_data.graph_paths.append(get_random_path())
+    #global_game_data.graph_paths.append(get_dfs_path())
+    #global_game_data.graph_paths.append(get_bfs_path())
     global_game_data.graph_paths.append(get_dijkstra_path())
-    global_game_data.graph_paths.append(get_a_star_path())
+    #global_game_data.graph_paths.append(get_a_star_path())
+    global_game_data.graph_paths.append(get_f_w_path())
 
 
 def get_test_path():
@@ -260,4 +263,17 @@ def get_a_star_path():
     for i in range(len(path) - 2):
         assert path[i] in graphData[path[i+1]][1], f'{path[i]} not in of {graphData[path[i+1]][1]}'
 
+    return path
+
+def get_f_w_path():
+    graphData = graph_data.graph_data[global_game_data.current_graph_index]
+    target_node = global_game_data.target_node[global_game_data.current_graph_index]
+
+    _, parents = f_w.floyd_warshall(graphData)
+    for row in parents:
+        print(row)
+    path = f_w.floyd_warshall_path(parents, 0, target_node)
+    path.remove(target_node)
+    path += f_w.floyd_warshall_path(parents, target_node, len(graphData) - 1)
+    print(path)
     return path
