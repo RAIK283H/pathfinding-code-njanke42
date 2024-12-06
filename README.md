@@ -14,3 +14,6 @@ HOMEWORK 6 EXTRA CREDIT
 I implemented a heapqueue to implement my priority queue. To ensure everything worked, I popped lowest weight values first and had a dictionary of nodes I had already visited (completed). If I popped a node that I already completed, I discarded it without any computation, which was my way of updating priorities. Therefore, the benefits of priority queue were maintained.
 
 I also implemented the A* algorithm using the distance from the node to the desired end as the heuristic. This is applicable because it will always underestimate or equal the true distance. I made sure to keep the weight value and the true distance value seperate so Dijkstras still functions.
+
+HOMEWORK 7 EXTRA CREDIT
+I implemented the Floyd-Warshall player by adding another player like all the others. I then added a function in pathing that will construct a path to the target and the exit using the floyd-warshall functions.

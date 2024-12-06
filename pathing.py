@@ -7,7 +7,6 @@ import f_w
 
 def set_current_graph_paths():
     global_game_data.graph_paths.clear()
-    global_game_data.target_node[0] = 13
     #global_game_data.graph_paths.append(get_test_path())
     #global_game_data.graph_paths.append(get_random_path())
     #global_game_data.graph_paths.append(get_dfs_path())
@@ -270,10 +269,7 @@ def get_f_w_path():
     target_node = global_game_data.target_node[global_game_data.current_graph_index]
 
     _, parents = f_w.floyd_warshall(graphData)
-    for row in parents:
-        print(row)
     path = f_w.floyd_warshall_path(parents, 0, target_node)
     path.remove(target_node)
     path += f_w.floyd_warshall_path(parents, target_node, len(graphData) - 1)
-    print(path)
     return path
